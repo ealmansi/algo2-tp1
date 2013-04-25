@@ -1,0 +1,48 @@
+TAD Reunion
+---------------------
+.genero
+  reunion
+
+.exporta reunion, observadores, generadores, restricciones
+ 
+.usa NAT, BOOL, CONJ(alpha)
+
+.observadores basicos
+  gremio 							: reunion -> nombre
+  empresas 						: reunion -> conj(empresa)
+  gremioPidio 				: reunion -> nat
+  empresasOfrecieron 	: reunion -> nat
+  huboAcuerdo   			: reunion -> bool
+  aumento       			: reunion r -> nat
+                			  { huboAcuerdo(r) }
+.generadores
+  ReunionSinAcuerdo : nombre x conj(empresa) x nat x nat -> reunion
+
+  ReunionConAcuerdo : nombre x conj(empresa) x nat gremioPidio x nat empresasOfrecieron x nat aumento -> reunion
+    { gremioPidio <= aumento <= empresasOfrecieron }
+
+
+.axiomas
+  gremio(ReunionSinAcuerdo(ng, ce, gp, eo))									== ng
+
+	gremio(ReunionConAcuerdo(ng, ce, gp, eo, au))							== ng
+  
+  empresas(ReunionSinAcuerdo(ng, ce, gp, eo))								== ce
+
+  empresas(ReunionConAcuerdo(ng, ce, gp, eo, au))						== ce
+  
+  gremioPidio(ReunionSinAcuerdo(ng, ce, gp, eo))						== gp
+
+  gremioPidio(ReunionConAcuerdo(ng, ce, gp, eo, au))				== gp
+  
+  empresasOfrecieron(ReunionSinAcuerdo(ng, ce, gp, eo))			== eo
+
+  empresasOfrecieron(ReunionConAcuerdo(ng, ce, gp, eo, au))	== eo
+  
+  huboAcuerdo(ReunionSinAcuerdo(ng, ce, gp, eo))       			== false
+  
+  huboAcuerdo(ReunionConAcuerdo(ng, ce, gp, eo, au))   			== true
+  
+  aumento(ReunionConAcuerdo(ng, ce, gp, eo, au))       			== au
+
+finTAD

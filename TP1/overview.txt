@@ -1,0 +1,26 @@
+es "súmamente estático":
+- gremios
+- personas asociadas a cada gremio
+- qué gremio está aliado con cuál otro
+- las empresas
+- la correspondencia de empresas a gremios
+
+paritarias:
+- discusiones igualitarias entre los representantes de los trabajadores y los patrones en las que se definen el porcentaje de aumento que se va a dar durante el año y cuándo se dará ese aumento.
+- se abren cuando se juntan un gremio y un conjunto mayoritario de empresas correspondientes a ese gremio (no es necesario que sean siempre las mismas), llevando cada uno el porcentaje de aumento que está dispuesto a aceptar.
+- los gremios siempre llevan como piso un porcentaje más alto que el mayor conseguido por todos sus aliados
+- queda abierta mientras se van haciendo reuniones entre las partes, cada una proponiendo un porcentaje y obteniendo si hubo acuerdo o no y el porcentaje de aumento del mismo.
+- la secuencia de reuniones termina cuando ambas partes hayan tenido como resultado un número que "las haga felices" (dicho número estará siempre entre las ofertas de las partes); en ese momento, se dice que la paritaria está cerrada.
+- puede ser reabierta en cualquier momento
+- la paritaria de un gremio es reabierta si un aliado al gremio logra un aumento superior al logrado en ella.
+
+condiciones:
+- una persona puede pertenecer a un solo gremio
+- la relación de alianzas es transitiva y simétrica
+- un gremio no puede estar aliado a sí mismo
+- no puede haber dos paritarias del mismo gremio abiertas en paralelo
+
+preguntas a responder:
+- Qué empresas están negociando paritarias y a su vez los gremios involucrados (paritarias abiertas).
+- Alguno de los gremios que más veces reabrió paritarias.
+- Cuántos trabajadores están con paritarias abiertas.

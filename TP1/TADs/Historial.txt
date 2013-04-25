@@ -1,0 +1,61 @@
+TAD Historial
+---------------------
+.genero
+  historial
+
+.exporta historia, observadores, generadores, cerrado, algunaVezAbrio, cantidadDeReaperturas, restricciones
+
+.usa BOOL, NAT, REUNION
+
+.observadores basicos
+  abierto               : historial -> bool
+  maximoAumento         : historial -> nat
+  cantidadDeAperturas   : historial -> nat
+
+.generadores
+  CrearHistorial      : -> historial
+  AbrirHistorial      : historial -> historial
+  RegistrarReunion    : reunion x historial -> historial
+
+.otras operaciones
+  cerrado                 : historial -> bool
+  max                     : nat x nat -> nat
+  algunaVezAbrio          : historial -> bool
+  cantidadDeReaperturas   : historial -> nat
+
+.axiomas
+  abierto(CrearHistorial)             == false
+
+  abierto(AbrirHistorial(hi))         == true
+
+  abierto(RegistrarReunion(r, hi))    == not huboAcuerdo(r)
+
+  maximoAumento(CrearHistorial)             == 0
+
+  maximoAumento(AbrirHistorial(hi))         == maximoAumento(hi)
+
+  maximoAumento(RegistrarReunion(r, hi))    ==
+    if huboAcuerdo(r) then
+      max( aumento(r), maximoAumento(hi) )
+    else
+      maximoAumento(hi)
+    fi
+
+  cantidadDeAperturas(CrearHistorial)             == 0
+
+  cantidadDeAperturas(AbrirHistorial(hi))         == cantidadDeAperturas(hi) + 1
+
+  cantidadDeAperturas(RegistrarReunion(r, hi))    == cantidadDeAperturas(hi)
+
+  cerrado(hi)   == not abierto(hi)
+
+  algunaVezAbrio(hi)    == cantidadDeAperturas(hi) > 0
+
+  cantidadDeReaperturas(hi)   == 
+    if algunaVezAbrio(hi) then
+      cantidadDeAperturas(hi) - 1
+    else
+      0
+    fi
+
+finTAD  

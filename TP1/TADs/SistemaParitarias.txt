@@ -1,0 +1,134 @@
+TAD SistemaParitarias
+---------------------
+.genero
+  sistema
+
+.exporta sistema, observadores, generadores, gremiosNegociando, emrpresasNegociando, #trabajadoresNegociando, gremioInconformista, restricciones
+
+
+.usa BOOL, NAT, DATOS, HISTORIAL, CONJ(alpha)
+
+.observadores basicos
+  gremios     : sistema -> conj(gremio)
+  aliados     : nombre ng x sistema si -> conj(nombre)
+                { elGremioExiste(ng, si) }
+  historial   : nombre ng x sistema si -> historial
+                { elGremioExiste(ng, si) }
+
+.generadores
+  CrearSistema        : datos d -> sistema
+  AbrirParitaria      : nombre ng x sistema si -> sistema
+                        { cerrado(historial(ng, si)) }
+  HuboReunion         : nombre ng x reunion rn x sistema si -> sistema
+                        { abierto(historial(ng, si)) y pideMasQueSusAliados(ng, rn, si) }
+
+.otras operaciones
+  gremiosNegociando         : sistema si -> conj(gremio)
+  empresasNegociando        : sistema si -> conj(empresa)
+  #trabajadoresNegociando   : sistema si -> nat
+
+  gremioInconformista       : sistema si -> gremio
+  gremioInconformistaAux    : conj(gremio) x sistema -> nat
+  cantReaperturasGremio     : gremio x sistema -> nat
+  maximaCantReaperturas     : sistema si -> nat
+  maximaCantReaperturasAux  : conj(gremio) x sistema -> nat
+
+  gremiosNegociandoAux          : conj(gremio) cg x sistema si -> conj(gremio)
+  empresasNegociandoAux         : conj(gremio) cg -> conj(gremio)
+  #trabajadoresNegociandoAux    : conj(gremio) cg -> conj(gremio)
+
+  elGremioExiste            : nombre ng x sistema si -> bool
+  pideMasQueSusAliados      : nombre ng x reunion x sistema -> bool
+  hayQueReabrirHistorial    : nombre ng1 x nombre ng2 x reunion rng2 x sistema si -> bool
+
+.axiomas
+  gremios( CrearSistema(d) )          == gremiosRegistrados(d)
+
+  gremios( AbrirParitaria(g, si) )    == gremios(si)
+
+  gremios( HuboReunion(g, rn, si) )   == gremios(si)
+  
+  aliados(ng, CrearSistema(d) )             == aliadosRegistrados(ng, d)
+
+  aliados(ng1, AbrirParitaria(ng2, si) )    == aliados(ng1, si)
+
+  aliados(ng1, HuboReunion(ng2, rn, si) )   == aliados(ng1, si)
+
+  historial(ng, CrearSistema(ca) )            == CrearHistorial
+
+  historial(ng1, AbrirParitaria(ng2, si) )    ==
+    if ng1 = ng2
+      AbrirHistorial( historial(ng1, si) )
+    else
+      historial(ng1, si)
+    fi
+
+  historial(ng1, HuboReunion(ng2, rn, si) )   ==
+    if ng1 = ng2
+       RegistrarReunion(rn, historial(ng1, si) )
+    else
+      if hayQueReabrirHistorial(ng1, ng2, rn, si) then
+        AbrirHistorial( historial(ng1, si) )
+      else
+        historial(ng1, si)
+      fi
+    fi
+
+  gremiosNegociando(si)   == gremiosNegociandoAux(gremios(si), si)
+
+  empresasNegociando(si)    == empresasNegociandoAux(gremiosNegociando(si))
+
+  #trabajadoresNegociando(si)   == #trabajadoresNegociandoAux(gremiosNegociando(si))
+
+  gremioInconformista(si) == gremioInconformistaAux(gremios(si), si)
+
+  gremioInconformistaAux(cg, si) ==
+    if cantReaperturasGremio(dameUno(cg), si) = maximaCantReaperturas(si) then
+      dameUno(cg)
+    else
+      gremioInconformistaAux(sinUno(cg), si)
+    fi
+
+  cantReaperturasGremio(g, si) == cantReaperturas(historial(nombre(g), si))
+  
+  maximaCantReaperturas(si) == maximaCantReaperturasAux(gremios(si), si)
+
+  maximaCantReaperturasAux(cg, si) ==
+    if vacío?(cg) then
+      0
+    else
+      max(cantReaperturasGremio(dameUno(cg), si), maximaCantReaperturasAux(sinUno(cg), si))
+    fi
+
+  gremiosNegociandoAux(cg, si)    ==
+    if vacio?(cg) then
+      {}
+    else
+      if abierto(historial(nombre(dameUno(cg)), si)) then
+        Ag(dameUno(cg), gremiosNegociandoAux(sinUno(cg), si))
+      else
+        gremiosNegociandoAux(sinUno(cg), si)
+      fi
+    fi
+
+  empresasNegociandoAux(cg)   ==
+    if vacio?(cg) then
+      {}
+    else
+      empresas(dameUno(cg)) union empresasNegociandoAux(sinUno(cg))
+    fi
+
+  #trabajadoresNegociandoAux(cg)    ==
+    if vacio?(cg) then
+      0
+    else
+      cantTrabajadores(dameUno(cg)) + #trabajadoresNegociandoAux(sinUno(cg))
+    fi
+  
+  elGremioExiste(ng, si)    == (existe g : gremio | g pertenece gremios(si)) nombre(g) = ng
+
+  pideMasQueSusAliados(ng, rn, si)    == (paratodo nga : nombre | nga pertenece aliados(ng, si)) gremioPidio(rn) > maximoAumento(historial(nga, si))
+
+  hayQueReabrirHistorial(ng1, ng2, rng2, si)    == cerrado(historial(ng1, si)) y ng1 pertenece aliados(ng2, si) y huboAcuerdo(rng2)
+
+finTAD

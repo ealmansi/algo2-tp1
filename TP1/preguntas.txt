@@ -1,0 +1,49 @@
+TAD persona? o #trabajadores
+dónde metemos la informacion de las alianzas? (sistema de paritarias, o gremio)
+cómo es exactamente la dinámica de la paritaria (abro paritaria, cada parte aclara de entrada cual es su piso [qué pasa si un aliado obtiene algo mejor que el piso cuando la paritaria ya fue abierta??])
+cuál es la condición para que haya acuerdo?
+el cierre de paritaria es automático (en función de las propuestas)?
+
+--------------------------
+COPIO RESPUESTAS DE ALEXIS
+--------------------------
+
+Hola Emilio, 
+Te contesto sobre el mail. 
+
+>
+> Hola. Tengo dos preguntas puntuales sobre el enunciado:
+>
+> alianzas entre gremios: la relacion en general no es reflexiva, pero puede haber casos puntuales reflexivos (o sea, un gremio aliado a sí mismo)? En la clase me parece que se dijo que no, pero entonces no entiendo por qué es necesaria la aclaración en la siguiente frase: "Los gremios siempre llevarán como piso un número mayor al mayor conseguido por un aliado suyo (sin contar con su propia propuesta anterior para la misma paritaria )." ?
+>
+
+No pueden haber casos reflexivos. 
+Está así porque habla sobre la propuesta y del del propio gremio.
+
+> acuerdo entre las partes: se considera que hubo acuerdo después de una reunión en función de los números propuestos por cada lado? ( sería algo así como hay acuerdo si propuesta(gremio)<=propuesta(empresas) ). O la existencia de un acuerdo es un dato que se ingresa al registrar la reunión? (por ejemplo: los gremios pedían 25% pero las empresas los convencieron de tomar 20% => NuevaReunion(gremios = 25%, empresas = 20%, Acuerdo = true, Aumento = 20%))
+>
+
+A ver. Si hay acuerdo esta entre los numeros de las partes. Pero no es verdad que va a haber acuerdo si o si de tener propuesta(gremio)<=propuesta(empresas)
+Slds
+
+--------------------------
+
+Pregunta:
+
+Hola,
+
+discutiendo el enunciado con mis compañeros de grupo surgió una duda respecto a cómo interpretar la dinámica de las paritarias
+la noción que tenemos por ahora es la siguiente:
+
+en un momento dado, se abre una paritaria entre un gremio y un conjunto mayoritario de empresas del gremio. en el momento de apertura, el gremio dice "yo no acepto menos de X%", y las empresas dicen "yo no acepto mas de Y%". Ese X% tiene que cumplir la condición que dice el enunciado.
+Una vez que la paritaria se abrió, ese X e Y quedan fijos a medida que se hacen las reuniones.
+En cada reunión, alguna de las partes (pero solo una) propone un número. Si el gremio pide menos de Y% o las empresas dan más de X%, entonces hay acuerdo y se cierra la paritaria con el numero propuesto.
+
+esa es la idea?
+
+
+Rta:
+
+Hola Emilio.
+Esta todo ok lo que planteas, salvo que los X e Y pueden variar en cada reunion y pueden hacerlo al mismo tiempo.
+Slds

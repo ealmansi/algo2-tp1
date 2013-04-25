@@ -1,0 +1,7 @@
+TAD Trabajador ES String
+
+TAD Empresa ES String
+
+TAD Nombre ES String
+
+TAD Alianza ES Conjunto(Gremio)

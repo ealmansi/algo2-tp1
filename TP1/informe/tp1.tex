@@ -1,0 +1,88 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[paper=a4paper, left=1.5cm, right=1.5cm, bottom=1.5cm, top=3.5cm]{geometry}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{indentfirst}
+\usepackage{fancyhdr}
+\usepackage{latexsym}
+\usepackage{lastpage}
+\usepackage{aed2-symb,aed2-itef,aed2-tad}
+\usepackage[colorlinks=true, linkcolor=blue]{hyperref}
+\usepackage{calc}
+\usepackage{enumitem}
+\usepackage{graphicx} %Para incluir el logo de la UBA
+\usepackage{caratula} %Para armar el cuadro de integrantes
+
+%inicio func aux
+
+\input{ComandosAuxiliares.tex}
+
+%fin func aux
+
+
+\sloppy
+
+\hypersetup{%
+ % Para que el PDF se abra a p�gina completa.
+ pdfstartview= {FitH \hypercalcbp{\paperheight-\topmargin-1in-\headheight}},
+ pdfauthor={Algoritmos y Estructuras de Datos II},
+ pdfkeywords={especificacion},
+ pdfsubject={Trabajo Practico Especificacion}
+}
+
+\parskip=3pt % 10pt es el tama�o de fuente
+
+% Pongo en 0 la distancia extra entre �temes.
+\let\olditemize\itemize
+\def\itemize{\olditemize\itemsep=0pt}
+
+% Acomodo fancyhdr.
+\pagestyle{fancy}
+\thispagestyle{fancy}
+\addtolength{\headheight}{1pt}
+\lhead{Algoritmos y Estructuras de Datos II: TPE}
+\rhead{$1^{\mathrm{er}}$ cuatrimestre de 2013}
+\cfoot{\thepage /\pageref{LastPage}}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+%indice
+\thispagestyle{empty}
+
+\input{caratula.tex}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+%TADS
+
+\section{Renombres}
+\input{Renombres.tex}
+\clearpage
+
+\section{TAD \tadNombre{Gremio}}
+\input{TADGremio.tex}
+\clearpage
+
+\section{TAD \tadNombre{Reunion}}
+\input{TADReunion.tex}
+\clearpage
+
+\section{TAD \tadNombre{Historial}}
+\input{TADHistorial.tex}
+\clearpage
+
+\section{TAD \tadNombre{DatosSistemaParitarias}}
+\input{TADDatosSistemaParitarias.tex}
+\clearpage
+
+\section{TAD \tadNombre{SistemaParitarias}}
+\input{TADSistemaParitarias.tex}
+\clearpage
+
+\end{document}

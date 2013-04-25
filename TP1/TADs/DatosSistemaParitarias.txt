@@ -1,0 +1,77 @@
+TAD DatosSistemaParitarias
+---------------------
+.genero
+	datos
+
+.exporta datos, observadores, generadores, gremiosRegistrados, aliadosRegistrados, restricciones
+
+
+.usa BOOL, CONJ(alpha), GREMIO
+
+.observadores basicos
+	alianzas 		: datos -> conj(alianza)
+
+.generadores
+	CrearDatos	: conj(alianza) ca -> datos
+								{ sonDatosValidos(ca) }
+
+.otras operaciones
+	gremiosRegistrados			: datos -> conj(gremio)
+	aliadosRegistrados 			: nombre x datos -> conj(nombre)
+	aliadosRegistradosAux		: nombre x conj(alianza) -> conj(nombre)
+
+	aplanar									: conj(alianza) -> conj(gremio)
+	obtenerNombres 					: conj(gremio) -> conj(nombre)
+
+	sonDatosValidos							: conj(alianza) -> bool
+	alianzasNoVacias						: conj(alianza) -> bool
+	sinGremiosCompartidos				: conj(alianza) -> bool
+	sinNombresRepetidos					: conj(gremio) -> bool
+	sinEmpresasCompartidas			: conj(gremio) -> bool
+	sinTrabajadoresCompartidos	: conj(gremio) -> bool
+
+.axiomas
+	alianzas(CrearDatos(ca))		== ca
+
+	gremiosRegistrados(d)				== aplanar(alianzas(d))
+
+	aliadosRegistrados(ng, d)		== aliadosRegistradosAux(ng, alianzas(d))
+	
+	aliadosRegistradosAux(ng, ca)		== 
+		if vacio?(ca) then
+      {}
+    else
+			if ng pertenece obtenerNombres(dameUno(ca)) then
+		    obtenerNombres(dameUno(ca)) - { ng }
+		  else
+		    aliadosRegistradosAux(g, sinUno(ca))
+		  fi
+		fi
+
+	aplanar(ca)		== 
+		if vacio?(ca) then
+      {}
+    else
+      dameUno(ca) union aplanar(sinUno(ca))
+    fi
+
+	obtenerNombres(cg)		== 
+		if vacio?(cg) then
+      {}
+    else
+			Ag(nombre(dameUno(cg)), obtenerNombres(sinUno(cg)))
+		fi
+
+	sonDatosValidos(ca) == alianzasNoVacias(ca) y sinGremiosCompartidos(ca) y sinNombresRepetidos(aplanar(ca)) y sinEmpresasCompartidas(aplanar(ca)) y sinTrabajadoresCompartidos(aplanar(ca))
+
+	alianzasNoVacias(ca)	== (paratodo a : alianza | a pertenece ca) not vacio?(a)
+
+	sinGremiosCompartidos(ca) == (paratodo a1 : alianza | a1 pertenece ca) (paratodo a2 : alianza | a2 pertenece ca - {a1}) vacio?(a1 intersec a2)
+
+	sinNombresRepetidos(cg) == (paratodo g1 : gremio | g1 pertenece cg) (paratodo g2 : gremio | g2 pertenece cg - {g1}) nombre(g1) != nombre(g2)
+
+	sinEmpresasCompartidas(cg) == (paratodo g1 : gremio | g1 pertenece cg) (paratodo g2 : gremio | g2 pertenece cg - {g1}) vacio?(empresas(g1) intersec empresas(g2))
+
+	sinTrabajadoresCompartidos(cg) == (paratodo g1 : gremio | g1 pertenece cg) (paratodo g2 : gremio | g2 pertenece cg - {g1}) vacio?(trabajadores(g1) intersec trabajadores(g2))
+
+finTAD 

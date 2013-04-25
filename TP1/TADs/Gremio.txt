@@ -1,0 +1,31 @@
+TAD Gremio
+----------
+.generos
+  gremio
+
+.exporta gremio, generadores, observadores, cantTrabajadores, restricciones
+
+.usa BOOL, NAT, CONJ(alpha)
+
+.observadores basicos
+  nombre       : gremio -> string
+  trabajadores : gremio -> conj(trabajador)
+  empresas     : gremio -> conj(empresa)
+
+.generadores
+  CrearGremio : nombre x conj(trabajador) ct x conj(empresa) ce -> gremio
+                { (not vacío?(ct)) && (not vacío?(ce)) }
+
+.otras operaciones
+  cantTrabajadores : gremio -> nat
+
+.axiomas
+  nombre( CrearGremio( n, ct, ce ) )    == n
+
+  trabajadores( CrearGremio( n, ct, ce ) )    == ct
+
+  empresas( CrearGremio( n, ct, ce ) )    == ce
+
+  cantTrabajadores(g)   == #(trabajadores(g))
+
+finTAD
