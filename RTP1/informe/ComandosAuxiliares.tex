@@ -1,0 +1,50 @@
+\newcommand{\f}[1]{\text{#1}}
+\renewcommand{\paratodo}[2]{$\forall$ #1 : #2}
+\newcommand{\paratodoC}[3]{$\forall$ #1 : #2 | #3 }
+\newcommand{\existeC}[3]{$\exists$ #1 : #2 | #3 }
+\newcommand{\tadAxiomaM}[2]{ \tadAxioma{\ensuremath{#1}}{\ensuremath{#2}}}
+\newcommand{\vacio}{$\emptyset$}
+\newcommand{\en}{$\in$\hspace{1mm}}
+\newcommand{\mnot}{$\lnot$\hspace{1mm}}
+\newcommand{\mand}{\hspace{1mm}$\land$\hspace{1mm}}
+\newcommand{\mneq}{$\neq$\hspace{1mm}}
+\newcommand{\meq}{$=$\hspace{1mm}}
+\newcommand{\mgt}{$>$\hspace{1mm}}
+\newcommand{\intersec}{$\cap$\hspace{1mm}}
+\newcommand{\union}{\hspace{1mm}$\cup$\hspace{1mm}}
+\newcommand{\conjMenos}[2]{#1 - \{#2\}}
+\newcommand{\migobs}{$\igobs$\hspace{1mm}}
+\newcommand{\esvacio}[1]{\vacio?(#1)}
+
+\newcommand{\iffi}[3]
+{\noindent
+\vspace*{-19pt}
+\begin{enumerate}[itemsep=0mm, labelsep=0mm, leftmargin=0mm]
+       \itemindent0mm
+       \item[] \LIF \hspace*{1mm} #1 \LTHEN
+       \itemindent10mm
+       \item[] #2
+       \itemindent0mm
+       \item[] \LELSE
+       \itemindent10mm
+       \item[] #3
+       \itemindent0mm
+       \item[] \LFI
+\end{enumerate}}
+
+\newcommand{\iffiI}[3]
+{\noindent
+\vspace*{-6mm}
+\begin{enumerate}[itemsep=0mm, labelsep=0mm, leftmargin=10mm]
+       \itemindent0mm
+       \item[] \LIF \hspace*{1mm} #1 \LTHEN
+       \itemindent10mm
+       \item[] #2
+       \itemindent0mm
+       \item[] \LELSE
+       \itemindent10mm
+       \item[] #3
+       \itemindent0mm
+       \item[] \LFI
+\end{enumerate}}
+

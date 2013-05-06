@@ -1,0 +1,50 @@
+\begin{tad}{\tadNombre{Gremio}}
+
+\tadIgualdadObservacional{g}{g'}{gremio}
+{nombre(g) $\igobs$ nombre(g')\mand \\
+trabajadores(g) $\igobs$ trabajadores(g')\mand \\
+empresas(g) $\igobs$ empresas(g') }	
+
+\tadGeneros{gremio}
+
+\tadExporta{gremio, generadores, observadores, cantTrabajadores, nombresDistintos, empresasDisjuntas, trabajadoresDisjuntos}
+
+\tadUsa{\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Conjunto($\alpha$)}}
+	
+\tadGeneradores
+	\tadOperacion{CrearGremio}{nombre/n,conj(trabajador)/ct,conj(empresa)/ce}{gremio}{\mnot \esvacio{ct}\mand \mnot \esvacio{ce}}
+	
+\tadObservadores
+	\tadAlinearFunciones{trabajadores}{gremio}
+	\tadOperacion{nombre}{gremio}{nombre}{}
+	\tadOperacion{trabajadores}{gremio}{conj(trabajador)}{}
+	\tadOperacion{empresas}{gremio}{conj(empresa)}{}		
+
+\tadOtrasOperaciones
+	\tadAlinearFunciones{cantTrabajadores}{gremio}
+	\tadOperacion{cantTrabajadores}{gremio}{nat}{}
+
+	\vspace{2mm}
+	\tadAlinearFunciones{trabajadoresDisjuntos}{gremio, gremio}
+	\tadOperacion{nombresDistintos}{gremio, gremio}{bool}{}
+	\tadOperacion{empresasDisjuntas}{gremio, gremio}{bool}{}
+	\tadOperacion{trabajadoresDisjuntos}{gremio, gremio}{bool}{}
+
+\tadAxiomas{\paratodo{n}{nat}, \paratodo{ct}{conj(trabajador)}, \paratodo{ce}{conj(empresa)}, \paratodo{g}{gremio}} \\
+
+	\tadAlinearAxiomas{trabajadores(CrearGremio(n, ct, ce))}
+	\tadAxioma{nombre(CrearGremio(n, ct, ce))}{n}
+	\tadAxioma{trabajadores(CrearGremio(n, ct, ce))}{ct}
+	\tadAxioma{empresas(CrearGremio(n, ct, ce))}{ce}
+
+	\vspace{2mm}
+	\tadAlinearAxiomas{cantTrabajadores(g)}
+	\tadAxioma{cantTrabajadores(g)}{\#(trabajadores(g))}
+
+	\vspace{2mm}
+	\tadAlinearAxiomas{trabajadores(CrearGremio(n, ct, ce))}
+	\tadAxioma{nombresDistintos(g1, g2)}{nombre(g1) \mneq nombre(g2))}
+	\tadAxioma{empresasDisjuntas(g1, g2)}{ \esvacio{empresas(g1) \intersec empresas(g2)} }
+	\tadAxioma{trabajadoresDisjuntos(g1, g2)}{ \esvacio{trabajadores(g1) \intersec trabajadores(g2)} }
+		
+\end{tad}

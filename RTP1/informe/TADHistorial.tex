@@ -1,0 +1,74 @@
+\emph{
+  El TAD Historial representa la paritaria entre un gremio
+  y las empresas correspondientes. Cada vez que hay una reuni\'on entre un gremio y las empresas,
+  se registra en el historial correspondiente, y este
+  es el encargado de determinar si la paritaria est\'a abierta o cerrada,
+  cu\'al fue el m\'aximo aumento conseguido y la cantidad de veces
+  que la paritaria fue reabierta.}
+
+\begin{tad}{\tadNombre{Historial}}
+
+\tadGeneros{historial}
+
+\tadIgualdadObservacional{h}{h'}{historial}{
+									abierto(h) $\igobs$ abierto(h') \mand \\
+									maximoAumento(h) $\igobs$ maximoAumento(h') \mand \\
+									cantidadAperturas(h) $\igobs$ cantidadAperturas(h')
+								}
+
+\tadExporta{historial, observadores, generadores, cerrado, algunaVezAbrio, cantidadDeReaperturas}
+
+\tadUsa{\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Reunion}}
+
+\tadObservadores
+  \tadAlinearFunciones{cantidadDeAperturas}{historial}
+  \tadOperacion{abierto}{historial}{bool}{}
+  \tadOperacion{maximoAumento}{historial}{nat}{}
+  \tadOperacion{cantidadDeAperturas}{historial}{nat}{}
+
+\tadGeneradores
+  \tadAlinearFunciones{RegistrarReunion}{reunion, historial}
+  \tadOperacion{CrearHistorial}{}{historial}{}
+  \tadOperacion{AbrirHistorial}{historial}{historial}{}
+  \tadOperacion{RegistrarReunion}{reunion, historial}{historial}{}
+
+\tadOtrasOperaciones
+  \tadAlinearFunciones{cantidadDeReaperturas}{historial}
+  \tadOperacion{cerrado}{historial}{bool}{}
+  \tadOperacion{algunaVezAbrio}{historial}{bool}{}
+  \tadOperacion{cantidadDeReaperturas}{historial}{nat}{}
+
+\tadAxiomas{\paratodo{rn}{reunion}, \paratodo{hi}{historial}} \\
+
+  \tadAlinearAxiomas{abierto(RegistrarReunion(rn, hi))}
+  \tadAxioma{abierto(CrearHistorial)}{false}
+  \tadAxioma{abierto(AbrirHistorial(hi))}{true}
+  \tadAxioma{abierto(RegistrarReunion(rn, hi))}{\mnot huboAcuerdo(rn)}
+
+  \vspace{2mm}
+  \tadAlinearAxiomas{maximoAumento(RegistrarReunion(rn, hi))}
+  \tadAxioma{maximoAumento(CrearHistorial)}{0}
+  \tadAxioma{maximoAumento(AbrirHistorial(hi))}{maximoAumento(hi)}
+  \tadAxioma{maximoAumento(RegistrarReunion(rn, hi))}{
+    \iffi{huboAcuerdo(rn)}
+    {max( aumento(rn), maximoAumento(hi) )}
+    {maximoAumento(hi)}
+  }
+
+  \vspace{2mm}
+  \tadAlinearAxiomas{cantidadDeAperturas(RegistrarReunion(rn, hi))}
+  \tadAxioma{cantidadDeAperturas(CrearHistorial)}{0}
+  \tadAxioma{cantidadDeAperturas(AbrirHistorial(hi))}{cantidadDeAperturas(hi) + 1}
+  \tadAxioma{cantidadDeAperturas(RegistrarReunion(rn, hi))}{cantidadDeAperturas(hi)}
+
+  \vspace{2mm}
+  \tadAlinearAxiomas{cantidadDeReaperturas(hi)}
+  \tadAxioma{cerrado(hi)}{\mnot abierto(hi)}
+  \tadAxioma{algunaVezAbrio(hi)}{cantidadDeAperturas(hi) > 0}
+  \tadAxioma{cantidadDeReaperturas(hi)}{
+    \iffi{algunaVezAbrio(hi)}
+    {cantidadDeAperturas(hi) - 1}
+    {0}
+  }
+
+\end{tad}

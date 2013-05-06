@@ -1,0 +1,146 @@
+\emph{
+  Para generar una instancia de SistemaParitarias es necesario proveer la informaci\'on est\'atica del mismo a trav\'es de una instancia de DatosSistemaParitarias. Despu\'es, la din\'amica de las paritarias se maneja (re)abriendo paritarias mediante el generador AbrirParitaria, o registrando el acontecimiento de una reuni\'on mediante el generador HuboReunion. Las operaciones empresasNegociando y gremiosNegociando permiten conocer las empresas y gremios con paritarias abiertas, y la operaci\'on gremioInconformista permite conocer alguno de los gremios que m\'as veces reabri\'o paritarias.
+}
+
+\begin{tad}{\tadNombre{SistemaParitarias}}
+
+\tadIgualdadObservacional{si}{si'}{sistema}{
+  gremios(si) $\igobs$ gremios(si') \mand \\
+  ((\paratodoC{ng}{nombre}{ ((\existeC{g}{gremio}{ g \en gremios(si)}) nombre(g) = ng})) aliados(ng, si) $\igobs$ aliados(ng, si') \mand historial(ng, si) $\igobs$ historial(ng, si'))
+}
+
+\tadGeneros{sistema}
+
+\tadExporta{sistema, observadores, generadores, gremiosNegociando, empresasNegociando, \#trabajadoresNegociando, gremioInconformista}
+
+\tadUsa{\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Datos}, \tadNombre{Historial}, \tadNombre{Conjunto($\alpha$)}}
+
+\tadObservadores
+	\tadAlinearFunciones{historial}{nombre/ng, sistema/si}
+  \tadOperacion{gremios}{sistema}{conj(gremio)}{}
+  \tadOperacion{aliados}{nombre/ng, sistema/si}{conj(nombre)}{}
+  \hspace{90mm}
+  \{(\existeC{g}{gremio}{g \en gremios(si)}) nombre(g) = ng \}
+  \tadOperacion{historial}{nombre/ng, sistema/si}{historial}{}
+  \hspace{90mm}
+  \{(\existeC{g}{gremio}{g \en gremios(si)}) nombre(g) = ng \}
+
+\tadGeneradores
+	\tadAlinearFunciones{HuboReunion}{nombre/ng, reunion/rn, sistema/si}
+  \tadOperacion{CrearSistema}{datos/d}{sistema}{}
+  \tadOperacion{AbrirParitaria}{nombre/ng, sistema/si}{sistema}{ cerrado(historial(ng, si)) }
+  \tadOperacion{HuboReunion}{nombre/ng, reunion/rn, sistema/si}{sistema}{}
+
+  \vspace{-2mm}
+  \begin{itemize}
+    \itemindent50mm
+    \item[] \{ abierto(historial(ng, si))\mand ((\paratodoC{nga}{nombre}{nga \en aliados(ng, si)})
+    \itemindent70mm
+    \item[] gremioPidio(rn) \mgt maximoAumento(historial(nga, si))) \}
+  \end{itemize}
+
+\tadOtrasOperaciones
+  \tadAlinearFunciones{\#trabajadoresNegociandoAux}{conj(gremio)/cg, sistema/si}
+  \tadOperacion{gremiosNegociando}{sistema/si}{conj(gremio)}{}
+  \tadOperacion{gremiosNegociandoAux}{conj(gremio)/cg, sistema/si}{conj(gremio)}{}
+  \tadOperacion{empresasNegociando}{sistema/si}{conj(empresa)}{}
+  \tadOperacion{empresasNegociandoAux}{conj(gremio)/cg}{conj(gremio)}{}
+  \tadOperacion{\#trabajadoresNegociando}{sistema/si}{nat}{}
+  \tadOperacion{\#trabajadoresNegociandoAux}{conj(gremio)/cg}{conj(gremio)}{}
+  \tadOperacion{gremioInconformista}{sistema/si}{gremio}{}
+  \tadOperacion{gremioInconformistaAux}{conj(gremio)/cg,sistema/si}{nat}{}
+
+  \vspace{2mm}
+  \tadAlinearFunciones{maximaCantReaperturasAux}{conj(gremio)/cg,sistema/si}
+  \tadOperacion{cantReaperturasGremio}{gremio/g,sistema/si}{nat}{}    
+  \tadOperacion{maximaCantReaperturas}{sistema/si}{nat}{}
+  \tadOperacion{maximaCantReaperturasAux}{conj(gremio)/cg,sistema/si}{nat}{} 
+
+  \vspace{2mm}
+	\tadAlinearFunciones{hayQueReabrirHistorial}{nombre/ng1, nombre/ng2, reunion/rng2, sistema/si}
+  \tadOperacion{hayQueReabrirHistorial}{nombre/ng1, nombre/ng2, reunion/rng2, sistema/si}{bool}{}
+
+\tadAxiomas{\paratodo{d}{datos}, \paratodo{g}{gremio}, \paratodo{rn}{reunion}, \paratodo{ng}{nombre}, \paratodo{ng1}{nombre}, \paratodo{ng2}{nombre}, \paratodo{cg}{conj(gremio)}, \paratodo{si}{sistema} } \\
+
+	\tadAlinearAxiomas{gremios( HuboReunion(g, rn, si) )}
+  \tadAxioma{gremios( CrearSistema(d) )}{gremiosRegistrados(d)}
+  \tadAxioma{gremios( AbrirParitaria(g, si) )}{gremios(si)}
+  \tadAxioma{gremios( HuboReunion(g, rn, si) )}{gremios(si)}
+
+  \vspace{2mm}
+	\tadAlinearAxiomas{aliados(ng1, HuboReunion(ng2, rn, si) )}
+  \tadAxioma{aliados(ng, CrearSistema(d) )}{aliadosRegistrados(ng, d)}
+  \tadAxioma{aliados(ng1, AbrirParitaria(ng2, si) )}{aliados(ng1, si)}
+  \tadAxioma{aliados(ng1, HuboReunion(ng2, rn, si) )}{aliados(ng1, si)}
+
+  \vspace{2mm}
+	\tadAlinearAxiomas{historial(ng1, HuboReunion(ng2, rn, si) )}
+  \tadAxioma{historial(ng, CrearSistema(d) )}{CrearHistorial}
+  \tadAxioma{historial(ng1, AbrirParitaria(ng2, si) )}{
+    \iffi{ng1 \meq ng2}
+    {AbrirHistorial( historial(ng1, si) )}
+    {historial(ng1, si)}
+  }
+  \tadAxioma{historial(ng1, HuboReunion(ng2, rn, si) )}{
+    \iffi{ng1 \meq ng2}
+    {RegistrarReunion(rn, historial(ng1, si) )}
+    {\iffiI{hayQueReabrirHistorial(ng1, ng2, rn, si)}
+     {AbrirHistorial( historial(ng1, si) )}
+     {historial(ng1, si)}
+    }
+  }
+
+  \vspace{2mm}
+	\tadAlinearAxiomas{gremiosNegociandoAux(cg, si)}
+  \tadAxioma{gremiosNegociando(si)}{gremiosNegociandoAux(gremios(si), si)}
+  \tadAxioma{gremiosNegociandoAux(cg, si)}{
+    \iffi{vacio?(cg)}
+    {\vacio}
+    {\iffiI{abierto(historial(nombre(dameUno(cg)), si))}
+     {Ag(dameUno(cg), gremiosNegociandoAux(sinUno(cg), si))}
+     {gremiosNegociandoAux(sinUno(cg), si)}
+    }
+  }
+
+  \vspace{2mm}
+  \tadAlinearAxiomas{empresasNegociandoAux(cg)}
+  \tadAxioma{empresasNegociando(si) }{empresasNegociandoAux(gremiosNegociando(si))}
+  \tadAxioma{empresasNegociandoAux(cg)}{
+    \iffi{vacio?(cg)}
+    {\vacio}
+    {empresas(dameUno(cg))\union empresasNegociandoAux(sinUno(cg))}
+   }
+
+  \vspace{2mm}
+  \tadAlinearAxiomas{\#trabajadoresNegociandoAux(cg)}
+  \tadAxioma{\#trabajadoresNegociando(si)}{\#trabajadoresNegociandoAux(gremiosNegociando(si))}
+  \tadAxioma{\#trabajadoresNegociandoAux(cg)}{
+  	\iffi{vacio?(cg)}
+    {0}
+    {cantTrabajadores(dameUno(cg)) + \#trabajadoresNegociandoAux(sinUno(cg))}
+  }
+
+  \vspace{2mm}
+  \tadAlinearAxiomas{gremioInconformistaAux(cg, si)}
+  \tadAxioma{gremioInconformista(si)}{gremioInconformistaAux(gremios(si), si)}
+  \tadAxioma{gremioInconformistaAux(cg, si)}{
+    \iffi{cantReaperturasGremio(dameUno(cg), si) = maximaCantReaperturas(si)}
+      {dameUno(cg)}
+      {gremioInconformistaAux(sinUno(cg), si)}
+    }
+
+  \vspace{2mm}
+  \tadAlinearAxiomas{maximaCantReaperturasAux(cg, si)}
+  \tadAxioma{cantReaperturasGremio(g, si)}{cantidadDeReaperturas(historial(nombre(g), si))}  
+  \tadAxioma{maximaCantReaperturas(si)(g, si)}{maximaCantReaperturasAux(gremios(si), si)}  
+  \tadAxioma{maximaCantReaperturasAux(cg, si)}{
+    \iffi{ \esvacio{ cg } }
+      {0}
+      {max(cantReaperturasGremio(dameUno(cg), si), maximaCantReaperturasAux(sinUno(cg), si))}
+    }    
+
+  \vspace{2mm}
+    \tadAlinearAxiomas{hayQueReabrirHistorial(ng1, ng2, rng2, si)}
+    \tadAxioma{hayQueReabrirHistorial(ng1, ng2, rng2, si)}{cerrado(historial(ng1, si))\mand ng1 \en aliados(ng2, si)\mand huboAcuerdo(rng2)}
+  
+\end{tad}

@@ -1,0 +1,58 @@
+\begin{tad}{\tadNombre{Reunion}}
+
+\tadIgualdadObservacional{r}{r'}
+{
+	reunion}{gremio(r) \migobs gremio(r')\mand \\
+ 	empresas(r) \migobs empresas(r')\mand \\
+ 	gremioPidio(r) \migobs gremioPidio(r')\mand \\
+ 	empresasOfrecieron(r) \migobs empresasOfrecieron(r')\mand \\
+ 	huboAcuerdo(r) \migobs huboAcuerdo(r')\mand \\
+ 	(huboAcuerdo(r) \impluego aumento(r) \migobs aumento(r'))
+}	
+
+\tadGeneros{reunion}
+
+\tadExporta{reunion, observadores, generadores}
+
+\tadUsa{\tadNombre{Nat}, \tadNombre{Bool}, \tadNombre{Conjunto($\alpha$)}}
+
+\tadObservadores
+	\tadAlinearFunciones{empresasOfrecieron}{reunion}
+	\tadOperacion{gremio}{reunion}{nombre}{}
+	\tadOperacion{empresas}{reunion}{conj(empresa)}{}
+	\tadOperacion{gremioPidio}{reunion}{nat}{}		
+	\tadOperacion{empresasOfrecieron}{reunion}{nat}{}		
+	\tadOperacion{huboAcuerdo}{reunion}{bool}{}		
+	\tadOperacion{aumento}{reunion}{nat}{huboAcuerdo(r)}		
+
+\tadGeneradores
+	\tadAlinearFunciones{ReunionConAcuerdo}{nombre, conj(empresa), nat, nat, nat}
+	\tadOperacion{ReunionSinAcuerdo}{nombre, conj(empresa),nat,nat}{reunion}{}
+	\tadOperacion{ReunionConAcuerdo}{nombre, conj(empresa), nat, nat, nat}{reunion}{}
+	
+\tadAxiomas{\paratodo{ng}{nombre}, \paratodo{ce}{conj(empresa)}, \paratodo{gp}{nat}, \paratodo{eo}{nat}, \paratodo{au}{nat}} \\
+
+	\tadAlinearAxiomas{empresasOfrecieron(ReunionConAcuerdo(ng, ce, gp, eo, au))}
+	\tadAxioma{gremio(ReunionSinAcuerdo(ng, ce, gp, eo))}{ng}
+	\tadAxioma{gremio(ReunionConAcuerdo(ng, ce, gp, eo, au))}{ng}
+
+	\vspace{2mm}
+	\tadAxioma{empresas(ReunionSinAcuerdo(ng, ce, gp, eo))}{ce}
+	\tadAxioma{empresas(ReunionConAcuerdo(ng, ce, gp, eo, au))}{ce}
+
+	\vspace{2mm}
+	\tadAxioma{gremioPidio(ReunionSinAcuerdo(ng, ce, gp, eo))}{gp}		
+	\tadAxioma{gremioPidio(ReunionConAcuerdo(ng, ce, gp, eo, au))}{gp}
+
+	\vspace{2mm}	
+	\tadAxioma{empresasOfrecieron(ReunionSinAcuerdo(ng, ce, gp, eo))}{eo}		
+	\tadAxioma{empresasOfrecieron(ReunionConAcuerdo(ng, ce, gp, eo, au))}{eo}
+
+	\vspace{2mm}	
+	\tadAxioma{huboAcuerdo(ReunionSinAcuerdo(ng, ce, gp, eo))}{false}
+	\tadAxioma{huboAcuerdo(ReunionConAcuerdo(ng, ce, gp, eo, au))}{true}
+
+	\vspace{2mm}						
+	\tadAxioma{aumento(ReunionConAcuerdo(ng, ce, gp, eo, au))}{au}						
+		
+\end{tad}

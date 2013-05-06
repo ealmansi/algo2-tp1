@@ -1,0 +1,78 @@
+\emph{
+A partir de un conjunto de alianzas ( o, lo que es igual, conjunto de conjuntos de gremios ), se determinan todos los gremios que pertenecen al sistema de paritarias y cu\'ales son las relaciones de alianza entre ellos. En cada conjunto de gremios, se considera que cada uno de los elementos est\'a aliado con todos los del grupo (salvo consigo mismo). Por construcci\'on, esto garantiza que la relaci\'on de alianzas sea transitiva y sim\'etrica, y sin casos reflexivos. Adem\'as, la totalidad de los gremios del sistema es simplemente la enumeraci\'on de todos los gremios que pertenecen a alguno de los conjuntos. Esto tambi\'en admite tener gremios sin aliados, ya que se los puede incluir como elementos \'unicos en un conjunto.
+}
+
+\begin{tad}{\tadNombre{DatosSistemaParitarias}}
+
+\tadIgualdadObservacional{d}{d'}{datos}{alianzas(d) $\igobs$ alianzas(d')}
+
+\tadGeneros{datos}
+
+\tadExporta{datos, observadores, generadores, gremiosRegistrados, aliadosRegistrados, aplanar}
+
+\tadUsa{\tadNombre{Bool}, \tadNombre{Conjunto($\alpha$)}, \tadNombre{Gremio}}
+
+\tadObservadores
+	\tadOperacion{alianzas}{datos}{conj(alianza)}{}
+
+\tadGeneradores
+	\tadOperacion{CrearDatos}{conj(alianza)/ca}{datos}{}
+	\begin{itemize}
+		\itemindent2mm
+		\item[] \{\mnot \esvacio{ca})\mand
+		\item[] ((\paratodoC{a}{alianza}{a \en ca}) \mnot \esvacio{a})\mand
+		\item[] ((\paratodoC{a1}{alianza}{a1 \en ca}) (\paratodoC{a2}{alianza}{a2 \en \conjMenos{ca}{a1}}) \esvacio{a1 \intersec a2})\mand
+		\item[] ((\paratodoC{g1}{gremio}{g1 \en aplanar(ca)}) (\paratodoC{g2}{gremio}{g2 \en \conjMenos{aplanar(ca)}{g1}}) nombresDistintos(g1, g2))\mand
+		\item[] ((\paratodoC{g1}{gremio}{g1 \en aplanar(ca)}) (\paratodoC{g2}{gremio}{g2 \en \conjMenos{aplanar(ca)}{g1}}) empresasDisjuntas(g1, g2))\mand
+		\item[] ((\paratodoC{g1}{gremio}{g1 \en aplanar(ca)}) (\paratodoC{g2}{gremio}{g2 \en \conjMenos{aplanar(ca)}{g1}}) trabajadoresDisjuntos(g1,g2)\}
+	\end{itemize}
+
+\tadOtrasOperaciones
+	\tadAlinearFunciones{aliadosRegistradosAux}{nombre, conj(alianza)}
+	\tadOperacion{gremiosRegistrados}{datos}{conj(gremio)}{}
+	\tadOperacion{aplanar}{conj(alianza)}{conj(gremio)}{}
+
+	\vspace{2mm}
+	\tadAlinearFunciones{aliadosRegistradosAux}{nombre, conj(alianza)}
+	\tadOperacion{aliadosRegistrados}{nombre, datos}{conj(nombre)}{}
+	\tadOperacion{aliadosRegistradosAux}{nombre, conj(alianza)}{conj(nombre)}{}
+
+	\vspace{2mm}
+	\tadAlinearFunciones{obtenerNombres}{conj(gremio)}
+	\tadOperacion{obtenerNombres}{conj(gremio)}{conj(nombre)}{}
+
+\tadAxiomas{\paratodo{ca}{conj(alianza)},\paratodo{cg}{conj(gremio)}, \paratodo{d}{datos}, \paratodo{ng}{nombre}} \\
+
+	\tadAxioma{alianzas(CrearDatos(ca))}{ca}
+
+	\vspace{2mm}
+	\tadAlinearAxiomas{gremiosRegistrados(d)}
+	\tadAxioma{gremiosRegistrados(d)}{aplanar(alianzas(d))}
+	\tadAxioma{aplanar(ca)}{ 
+		\iffi{\esvacio{ca}}
+		{\vacio}
+		{dameUno(ca)\union aplanar(sinUno(ca))}
+	}
+
+	\vspace{2mm}
+	\tadAlinearAxiomas{aliadosRegistradosAux(ng, ca)}
+	\tadAxioma{aliadosRegistrados(ng, d)}{aliadosRegistradosAux(ng, alianzas(d))}
+	\tadAxioma{aliadosRegistradosAux(ng, ca)}{
+			\iffi{\esvacio{ca}}
+			{\vacio}
+			{
+				\iffiI{ng $\in$ obtenerNombres(dameUno(ca))}
+				{obtenerNombres(dameUno(ca)) - \{ ng \}}
+				{aliadosRegistradosAux(g, sinUno(ca))}
+			}
+		}
+
+	\vspace{2mm}
+	\tadAlinearAxiomas{obtenerNombres(cg)}
+	\tadAxioma{obtenerNombres(cg)}{ 
+		\iffi{\esvacio{cg}}
+		{\vacio}
+		{Ag(nombre(dameUno(cg)), obtenerNombres(sinUno(cg)))}
+	}
+
+\end{tad}
