@@ -14,11 +14,11 @@
 
 \tadExporta{reunion, observadores, generadores}
 
-\tadUsa{\tadNombre{Nat}, \tadNombre{Bool}, \tadNombre{Conjunto($\alpha$)}}
+\tadUsa{\tadNombre{Nat}, \tadNombre{Bool}, \tadNombre{Conjunto($\alpha$)}, \tadNombre{Gremio}}
 
 \tadObservadores
 	\tadAlinearFunciones{empresasOfrecieron}{reunion}
-	\tadOperacion{gremio}{reunion}{nombre}{}
+	\tadOperacion{gremio}{reunion}{gremio}{}
 	\tadOperacion{empresas}{reunion}{conj(empresa)}{}
 	\tadOperacion{gremioPidio}{reunion}{nat}{}		
 	\tadOperacion{empresasOfrecieron}{reunion}{nat}{}		
@@ -26,33 +26,33 @@
 	\tadOperacion{aumento}{reunion}{nat}{huboAcuerdo(r)}		
 
 \tadGeneradores
-	\tadAlinearFunciones{ReunionConAcuerdo}{nombre, conj(empresa), nat, nat, nat}
-	\tadOperacion{ReunionSinAcuerdo}{nombre, conj(empresa),nat,nat}{reunion}{}
-	\tadOperacion{ReunionConAcuerdo}{nombre, conj(empresa), nat, nat, nat}{reunion}{}
+	\tadAlinearFunciones{ReunionConAcuerdo}{gremio/g, conj(empresa)/ce, nat/gp, nat/eo, nat/au}
+	\tadOperacion{ReunionSinAcuerdo}{gremio/g, conj(empresa)/ce, nat/gp, nat/eo}{reunion}{ ce \incluido empresas(g) \mand 2 * \#(ce) \mgt \#(empresas(g)) \mand gp \mleq eo }
+	\tadOperacion{ReunionConAcuerdo}{gremio/g, conj(empresa)/ce, nat/gp, nat/eo, nat/au}{reunion}{ ce \incluido empresas(g) \mand 2 * \#(ce) \mgt \#(empresas(g)) \mand gp \mleq au \mleq eo }
 	
-\tadAxiomas{\paratodo{ng}{nombre}, \paratodo{ce}{conj(empresa)}, \paratodo{gp}{nat}, \paratodo{eo}{nat}, \paratodo{au}{nat}} \\
+\tadAxiomas{\paratodo{g}{gremio}, \paratodo{ce}{conj(empresa)}, \paratodo{gp}{nat}, \paratodo{eo}{nat}, \paratodo{au}{nat}} \\
 
-	\tadAlinearAxiomas{empresasOfrecieron(ReunionConAcuerdo(ng, ce, gp, eo, au))}
-	\tadAxioma{gremio(ReunionSinAcuerdo(ng, ce, gp, eo))}{ng}
-	\tadAxioma{gremio(ReunionConAcuerdo(ng, ce, gp, eo, au))}{ng}
-
-	\vspace{2mm}
-	\tadAxioma{empresas(ReunionSinAcuerdo(ng, ce, gp, eo))}{ce}
-	\tadAxioma{empresas(ReunionConAcuerdo(ng, ce, gp, eo, au))}{ce}
+	\tadAlinearAxiomas{empresasOfrecieron(ReunionConAcuerdo(g, ce, gp, eo, au))}
+	\tadAxioma{gremio(ReunionSinAcuerdo(g, ce, gp, eo))}{g}
+	\tadAxioma{gremio(ReunionConAcuerdo(g, ce, gp, eo, au))}{g}
 
 	\vspace{2mm}
-	\tadAxioma{gremioPidio(ReunionSinAcuerdo(ng, ce, gp, eo))}{gp}		
-	\tadAxioma{gremioPidio(ReunionConAcuerdo(ng, ce, gp, eo, au))}{gp}
+	\tadAxioma{empresas(ReunionSinAcuerdo(g, ce, gp, eo))}{ce}
+	\tadAxioma{empresas(ReunionConAcuerdo(g, ce, gp, eo, au))}{ce}
+
+	\vspace{2mm}
+	\tadAxioma{gremioPidio(ReunionSinAcuerdo(g, ce, gp, eo))}{gp}		
+	\tadAxioma{gremioPidio(ReunionConAcuerdo(g, ce, gp, eo, au))}{gp}
 
 	\vspace{2mm}	
-	\tadAxioma{empresasOfrecieron(ReunionSinAcuerdo(ng, ce, gp, eo))}{eo}		
-	\tadAxioma{empresasOfrecieron(ReunionConAcuerdo(ng, ce, gp, eo, au))}{eo}
+	\tadAxioma{empresasOfrecieron(ReunionSinAcuerdo(g, ce, gp, eo))}{eo}		
+	\tadAxioma{empresasOfrecieron(ReunionConAcuerdo(g, ce, gp, eo, au))}{eo}
 
 	\vspace{2mm}	
-	\tadAxioma{huboAcuerdo(ReunionSinAcuerdo(ng, ce, gp, eo))}{false}
-	\tadAxioma{huboAcuerdo(ReunionConAcuerdo(ng, ce, gp, eo, au))}{true}
+	\tadAxioma{huboAcuerdo(ReunionSinAcuerdo(g, ce, gp, eo))}{false}
+	\tadAxioma{huboAcuerdo(ReunionConAcuerdo(g, ce, gp, eo, au))}{true}
 
 	\vspace{2mm}						
-	\tadAxioma{aumento(ReunionConAcuerdo(ng, ce, gp, eo, au))}{au}						
+	\tadAxioma{aumento(ReunionConAcuerdo(g, ce, gp, eo, au))}{au}						
 		
 \end{tad}

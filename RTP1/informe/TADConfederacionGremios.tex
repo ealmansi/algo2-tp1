@@ -1,56 +1,44 @@
 \begin{tad}{\tadNombre{ConfederacionGremios}}
 
 \tadIgualdadObservacional{c}{c'}{confederacion}{gremios(c) \migobs gremios(c') \mandl \\
-(\paratodoC{ng}{nombre}{ng \en obtenerNombres(gremios(c))}) \\ aliados(ng,c) \migobs aliados(ng,c')
+(\paratodoC{g}{gremio}{g \en gremios(c)}) \\ aliados(g,c) \migobs aliados(g,c')
 }	
 
 \tadGeneros{confederacion}
 
 \tadExporta{confederacion, observadores}
 
-\tadUsa{\tadNombre{Nombre}, \tadNombre{Gremio}, \tadNombre{Conjunto($\alpha$)}}
+\tadUsa{\tadNombre{Gremio}, \tadNombre{Conjunto($\alpha$)}}
 
 \tadObservadores
-	\tadAlinearFunciones{aliados}{nombre/ng,confederacion/c}
+	\tadAlinearFunciones{aliados}{gremio/g,confederacion/c}
  	\tadOperacion{gremios}{confederacion/c}{conj(gremio)}{}
- 	\tadOperacion{aliados}{nombre/ng,confederacion/c}{conj(nombre)}{ng \en obtenerNombres(gremios(c))}
+ 	\tadOperacion{aliados}{gremio/g,confederacion/c}{conj(gremio)}{g \en gremios(c)}
 
 \tadGeneradores
 	\tadAlinearFunciones{CrearConfederacion}{}
 	\tadOperacion{CrearConfederacion}{}{confederacion}{}
-	\tadAlinearFunciones{CrearConfederacion}{nombre/ng1,nombre/ng2,confederacion/c}
-	\tadOperacion{AgregarGremio}{gremio/g,confederacion/c}{confederacion}{}
-	\begin{itemize}
-		\itemindent80mm
-		\item[] \{ ((\paratodoC{og}{gremio}{og \en gremios(c)})
-		\itemindent83mm
-		\item[] (nombre(g) \mneq nombre(og) \mand
-		\item[] \esvacio{empresas(g) \intersec empresas(og)} \mand
-		\item[] \esvacio{trabajadores(g) \intersec trabajadores(og)})) \}
-	\end{itemize}
-	\tadOperacion{EstablecerAlianza}{nombre/ng1,nombre/ng2,confederacion/c}{confederacion}{}
-	\begin{itemize}
-		\itemindent80mm
-		\item[] \{ ng1 \en obtenerNombres(gremios(c)) \mand
-		\itemindent83mm
-		\item[] ng2 \en obtenerNombres(gremios(c)) \mand
-		\item[] ng1 \mnotin aliados(ng2,c)\}
-	\end{itemize}
+	
+	\tadAlinearFunciones{EstablecerAlianza}{gremio/g,confederacion/c}
+	\tadOperacion{AgregarGremio}{gremio/g,confederacion/c}{confederacion}{(\paratodoC{og}{gremio}{og \en gremios(c)}) (nombre(g) \mneq nombre(og)) \mand \\ (\esvacio{empresas(g) \intersec empresas(og)}) \mand \\ (\esvacio{trabajadores(g) \intersec trabajadores(og))}}
+	
+	\tadAlinearFunciones{EstablecerAlianza}{gremio/g1,gremio/g2,confederacion/c}
+	\tadOperacion{EstablecerAlianza}{gremio/g1,gremio/g2,confederacion/c}{confederacion}{g1 \en gremios(c) \mand g2 \en gremios(c) \mand g1 \mnotin aliados(g2,c)}
 
-\tadAxiomas{\paratodo{c}{confederacion}, \paratodo{g}{gremio}, \paratodo{ng1}{nombre}, \paratodo{ng2}{nombre}} \\
-	\tadAlinearAxiomas{gremios(EstablecerAlianza(ng1,ng2,c))}
+\tadAxiomas{\paratodo{c}{confederacion}, \paratodo{g}{gremio}, \paratodo{g1}{gremio}, \paratodo{g2}{gremio}} \\
+	\tadAlinearAxiomas{gremios(EstablecerAlianza(g1,g2,c))}
   	\tadAxioma{gremios(CrearConfederacion)}{\vacio}
   	\tadAxioma{gremios(AgregarGremio(g,c))}{Ag(g, gremios(c)) }
-  	\tadAxioma{gremios(EstablecerAlianza(ng1,ng2,c))}{gremios(c)}
+  	\tadAxioma{gremios(EstablecerAlianza(g1,g2,c))}{gremios(c)}
 
 	\vspace{2mm}
- 	\tadAlinearAxiomas{aliados(ng, EstablecerAlianza(ng1,ng2,c))}
- 	\tadAxioma{aliados(ng, CrearConfederacion)}{\vacio}
-  	\tadAxioma{aliados(ng, AgregarGremio(g,c))}{aliados(ng,c)}
-  	\tadAxioma{aliados(ng, EstablecerAlianza(ng1,ng2,c))}{
-	  	\iffi{ng \meq ng1 \mor ng \en aliados(ng1,c)}
-	  	{Ag(ng2, aliados(ng,c))}
-	  	{\iffiI{ng \meq ng2 \mor ng \en aliados(ng2,c)}{Ag(ng1, aliados(ng,c))}{aliados(ng,c)}}
+ 	\tadAlinearAxiomas{aliados(g, EstablecerAlianza(g1,g2,c))}
+ 	\tadAxioma{aliados(g, CrearConfederacion)}{\vacio}
+  	\tadAxioma{aliados(g, AgregarGremio(g,c))}{aliados(g,c)}
+  	\tadAxioma{aliados(g, EstablecerAlianza(g1,g2,c))}{
+	  	\iffi{g \meq g1 \mor g \en aliados(g1,c)}
+	  	{Ag(g2, aliados(g,c))}
+	  	{\iffiI{g \meq g2 \mor g \en aliados(g2,c)}{Ag(g1, aliados(g,c))}{aliados(g,c)}}
   	}
 
 \end{tad}						
