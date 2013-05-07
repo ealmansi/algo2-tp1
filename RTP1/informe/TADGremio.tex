@@ -7,7 +7,7 @@ empresas(g) $\igobs$ empresas(g') }
 
 \tadGeneros{gremio}
 
-\tadExporta{gremio, generadores, observadores, cantTrabajadores, nombresDistintos, empresasDisjuntas, trabajadoresDisjuntos}
+\tadExporta{gremio, generadores, observadores, cantTrabajadores, obtenerNombres}
 
 \tadUsa{\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Conjunto($\alpha$)}}
 	
@@ -25,10 +25,8 @@ empresas(g) $\igobs$ empresas(g') }
 	\tadOperacion{cantTrabajadores}{gremio}{nat}{}
 
 	\vspace{2mm}
-	\tadAlinearFunciones{trabajadoresDisjuntos}{gremio, gremio}
-	\tadOperacion{nombresDistintos}{gremio, gremio}{bool}{}
-	\tadOperacion{empresasDisjuntas}{gremio, gremio}{bool}{}
-	\tadOperacion{trabajadoresDisjuntos}{gremio, gremio}{bool}{}
+	\tadAlinearFunciones{obtenerNombres}{conj(gremio)}
+ 	\tadOperacion{obtenerNombres}{conj(gremio)}{conj(nombre)}{}
 
 \tadAxiomas{\paratodo{n}{nat}, \paratodo{ct}{conj(trabajador)}, \paratodo{ce}{conj(empresa)}, \paratodo{g}{gremio}} \\
 
@@ -42,9 +40,11 @@ empresas(g) $\igobs$ empresas(g') }
 	\tadAxioma{cantTrabajadores(g)}{\#(trabajadores(g))}
 
 	\vspace{2mm}
-	\tadAlinearAxiomas{trabajadores(CrearGremio(n, ct, ce))}
-	\tadAxioma{nombresDistintos(g1, g2)}{nombre(g1) \mneq nombre(g2))}
-	\tadAxioma{empresasDisjuntas(g1, g2)}{ \esvacio{empresas(g1) \intersec empresas(g2)} }
-	\tadAxioma{trabajadoresDisjuntos(g1, g2)}{ \esvacio{trabajadores(g1) \intersec trabajadores(g2)} }
+ 	\tadAlinearAxiomas{obtenerNombres(cg)}
+ 	\tadAxioma{obtenerNombres(cg)}{
+		\iffi{\esvacio{cg}}
+		{\vacio}
+		{Ag(nombre(dameUno(cg)), obtenerNombres(sinUno(cg)))}
+	}
 		
 \end{tad}
