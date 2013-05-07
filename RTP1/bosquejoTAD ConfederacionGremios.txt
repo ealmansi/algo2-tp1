@@ -1,0 +1,43 @@
+TAD ConfederacionGremios
+
+.generos
+	confederacion
+
+.observadores básicos
+	gremios: confederacion c -> conj(gremio)
+	aliados: nombre ng x confederacion c -> conj(nombre)
+
+.generadores
+	CrearConfederacion:	-> confederacion
+	AgregarGremio:	gremio g x confederacion c -> confederacion
+					{ nombre(g) notin obtenerNombres(gremios(c)) }
+	EstablecerAlianza:	nombre ng1 x nombre ng2 x confederacion c -> confederacion
+					{ ng1 != ng2 &&
+					  ng1 in obtenerNombres(gremios(c)) &&
+					  ng2 in obtenerNombres(gremios(c)) }
+
+.otras operaciones
+	obtenerNombres: conj(gremio) -> conj(nombre)
+
+.axiomas
+	gremios(CrearConfederacion) == vacio
+	gremios(AgregarGremio(g,c)) == Ag(g, gremios(c)) 
+	gremios(EstablecerAlianza(ng1,ng2,c)) == gremios(c)
+
+	aliados(ng, CrearConfederacion) == vacio
+	aliados(ng, AgregarGremio(g,c)) == aliados(ng,c)
+	aliados(ng, EstablecerAlianza(ng1,ng2,c)) == 	if ng = ng1 then
+														Ag(ng2, aliados(ng2,c)) union aliados(ng,c)
+													else
+														if ng = ng2 then
+															Ag(ng1, aliados(ng1,c)) union aliados(ng,c)
+														else
+															aliados(ng,c)
+														fi
+													fi
+
+	obtenerNombres(cg)	== 	if vacio?(cg) then
+								vacio
+							else
+								Ag(nombre(dameUno(cg)), obtenerNombres(sinUno(cg)))
+							fi
