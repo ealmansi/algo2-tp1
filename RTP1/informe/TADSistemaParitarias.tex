@@ -22,7 +22,7 @@
   \tadOperacion{paritaria}{gremio/g, sistema/si}{paritaria}{g \en gremios(si)}
 
 \tadGeneradores
-	\tadAlinearFunciones{HuboReunion}{nombre/ng, reunion/rn, sistema/si}
+	\tadAlinearFunciones{HuboReunion}{reunion/rn, sistema/si}
   \tadOperacion{CrearSistema}{confederacion/c}{sistema}{}
   \tadOperacion{AbrirParitaria}{gremio/g, sistema/si}{sistema}{ g \en gremios(si) \mandl \mnot estaAbierta?(paritaria(g,si)) }
   \tadOperacion{HuboReunion}{reunion/rn, sistema/si}{sistema}{ gremio(rn) \en gremios(si)\mandl (\paratodoC{ga}{gremio}{ga \en aliados(gremio(rn),si)})\\ gremioPidio(rn) > maximoAumento(paritaria(ga,si))}
