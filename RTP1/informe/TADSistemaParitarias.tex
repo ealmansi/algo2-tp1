@@ -27,7 +27,7 @@
 
 \tadGeneradores
 	\tadAlinearFunciones{HuboReunion}{nombre/ng, reunion/rn, sistema/si}
-  \tadOperacion{CrearSistema}{datos/d}{sistema}{}
+  \tadOperacion{CrearSistema}{confederacion/c}{sistema}{}
   \tadOperacion{AbrirParitaria}{nombre/ng, sistema/si}{sistema}{ cerrado(historial(ng, si)) }
   \tadOperacion{HuboReunion}{nombre/ng, reunion/rn, sistema/si}{sistema}{}
 
@@ -63,19 +63,19 @@
 \tadAxiomas{\paratodo{d}{datos}, \paratodo{g}{gremio}, \paratodo{rn}{reunion}, \paratodo{ng}{nombre}, \paratodo{ng1}{nombre}, \paratodo{ng2}{nombre}, \paratodo{cg}{conj(gremio)}, \paratodo{si}{sistema} } \\
 
 	\tadAlinearAxiomas{gremios( HuboReunion(g, rn, si) )}
-  \tadAxioma{gremios( CrearSistema(d) )}{gremiosRegistrados(d)}
+  \tadAxioma{gremios( CrearSistema(c) )}{gremios(c)}
   \tadAxioma{gremios( AbrirParitaria(g, si) )}{gremios(si)}
   \tadAxioma{gremios( HuboReunion(g, rn, si) )}{gremios(si)}
 
   \vspace{2mm}
 	\tadAlinearAxiomas{aliados(ng1, HuboReunion(ng2, rn, si) )}
-  \tadAxioma{aliados(ng, CrearSistema(d) )}{aliadosRegistrados(ng, d)}
+  \tadAxioma{aliados(ng, CrearSistema(c) )}{aliados(ng, c)}
   \tadAxioma{aliados(ng1, AbrirParitaria(ng2, si) )}{aliados(ng1, si)}
   \tadAxioma{aliados(ng1, HuboReunion(ng2, rn, si) )}{aliados(ng1, si)}
 
   \vspace{2mm}
 	\tadAlinearAxiomas{historial(ng1, HuboReunion(ng2, rn, si) )}
-  \tadAxioma{historial(ng, CrearSistema(d) )}{CrearHistorial}
+  \tadAxioma{historial(ng, CrearSistema(c) )}{CrearHistorial}
   \tadAxioma{historial(ng1, AbrirParitaria(ng2, si) )}{
     \iffi{ng1 \meq ng2}
     {AbrirHistorial( historial(ng1, si) )}
