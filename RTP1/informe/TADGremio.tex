@@ -7,9 +7,9 @@ empresas(g) $\igobs$ empresas(g') }
 
 \tadGeneros{gremio}
 
-\tadExporta{gremio, generadores, observadores, cantTrabajadores, obtenerNombres}
+\tadExporta{gremio, generadores, observadores, \#trabajadores}
 
-\tadUsa{\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Conjunto($\alpha$)}}
+\tadUsa{\tadNombre{Nombre},\tadNombre{Trabajador},\tadNombre{Empresa},\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Conjunto($\alpha$)}}
 	
 \tadGeneradores
 	\tadOperacion{CrearGremio}{nombre/n,conj(trabajador)/ct,conj(empresa)/ce}{gremio}{\mnot \esvacio{ct}\mand \mnot \esvacio{ce}}
@@ -21,12 +21,8 @@ empresas(g) $\igobs$ empresas(g') }
 	\tadOperacion{empresas}{gremio}{conj(empresa)}{}		
 
 \tadOtrasOperaciones
-	\tadAlinearFunciones{cantTrabajadores}{gremio}
-	\tadOperacion{cantTrabajadores}{gremio}{nat}{}
-
-	\vspace{2mm}
-	\tadAlinearFunciones{obtenerNombres}{conj(gremio)}
- 	\tadOperacion{obtenerNombres}{conj(gremio)}{conj(nombre)}{}
+	\tadAlinearFunciones{\#trabajadores}{gremio}
+	\tadOperacion{\#trabajadores}{gremio}{nat}{}
 
 \tadAxiomas{\paratodo{n}{nat}, \paratodo{ct}{conj(trabajador)}, \paratodo{ce}{conj(empresa)}, \paratodo{g}{gremio}} \\
 
@@ -36,15 +32,7 @@ empresas(g) $\igobs$ empresas(g') }
 	\tadAxioma{empresas(CrearGremio(n, ct, ce))}{ce}
 
 	\vspace{2mm}
-	\tadAlinearAxiomas{cantTrabajadores(g)}
-	\tadAxioma{cantTrabajadores(g)}{\#(trabajadores(g))}
-
-	\vspace{2mm}
- 	\tadAlinearAxiomas{obtenerNombres(cg)}
- 	\tadAxioma{obtenerNombres(cg)}{
-		\iffi{\esvacio{cg}}
-		{\vacio}
-		{Ag(nombre(dameUno(cg)), obtenerNombres(sinUno(cg)))}
-	}
+	\tadAlinearAxiomas{\#trabajadores(g)}
+	\tadAxioma{\#trabajadores(g)}{\#(trabajadores(g))}
 		
 \end{tad}

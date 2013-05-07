@@ -2,15 +2,16 @@
 
 \tadGeneros{paritaria}
 
-% \tadIgualdadObservacional{h}{h'}{paritaria}{
-% 									estaAbierta?(h) $\igobs$ estaAbierta?(h') \mand \\
-% 									maximoAumento(h) $\igobs$ maximoAumento(h') \mand \\
-% 									cantidadAperturas(h) $\igobs$ cantidadAperturas(h')
-% 								}
+\tadIgualdadObservacional{p}{p'}{paritaria}{
+									estaAbierta?(p) $\igobs$ estaAbierta?(p') \mand \\
+									maximoAumento(p) $\igobs$ maximoAumento(p') \mand \\
+									\#aperturas(p) $\igobs$ \#aperturas(p') \mand \\
+                  \#reunionesSinAcuerdo(p)$\igobs$\#reunionesSinAcuerdo(p')
+								}
 
-% \tadExporta{paritaria, observadores, generadores, algunaVezAbrio, \#reaperturas}
+\tadExporta{paritaria, observadores, generadores, \#reaperturas}
 
-% \tadUsa{\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Reunion}}
+\tadUsa{\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Reunion}}
 
 \tadObservadores
   \tadAlinearFunciones{\#reunionesSinAcuerdo}{paritaria}
@@ -27,8 +28,8 @@
 
 \tadOtrasOperaciones
   \tadAlinearFunciones{llegoAlLimiteDeReuniones}{paritaria}
-  \tadOperacion{algunaVezAbrio}{paritaria}{bool}{}
   \tadOperacion{\#reaperturas}{paritaria}{nat}{}
+  \tadOperacion{algunaVezAbrio}{paritaria}{bool}{}
   \tadOperacion{llegoAlLimiteDeReuniones}{paritaria}{bool}{}
 
 \tadAxiomas{\paratodo{rn}{reunion}, \paratodo{p}{paritaria}} \\
@@ -58,16 +59,16 @@
   \tadAlinearAxiomas{\#reunionesSinAcuerdo(Reunion(rn, p))}
   \tadAxioma{\#reunionesSinAcuerdo(CrearParitaria)}{0}
   \tadAxioma{\#reunionesSinAcuerdo(Abrir(p))}{0}
-  \tadAxioma{\#reunionesSinAcuerdo(Reunion(rn, p))}{\iffi{huboAcuerdo(rn) \mor llegoAlLimiteDeReuniones(p)}{0}{1+\#reunionesSinAcuerdo(p)}}
+  \tadAxioma{\#reunionesSinAcuerdo(Reunion(rn, p))}{\iffi{huboAcuerdo(rn) \mor llegoAlLimiteDeReuniones(p)}{0}{1 + \#reunionesSinAcuerdo(p)}}
 
   \vspace{2mm}
   \tadAlinearAxiomas{algunaVezAbrio(p)}
-  \tadAxioma{algunaVezAbrio(p)}{\#aperturas(p) \mgt 0}
   \tadAxioma{\#reaperturas(p)}{
     \iffi{algunaVezAbrio(p)}
     {\#aperturas(p) - 1}
     {0}
   }
+  \tadAxioma{algunaVezAbrio(p)}{\#aperturas(p) \mgt 0}
 
   \vspace{2mm}
   \tadAlinearAxiomas{llegoAlLimiteDeReuniones(p)}

@@ -1,19 +1,16 @@
-% \emph{
-%   Para generar una instancia de SistemaParitarias es necesario proveer la informaci\'on est\'atica del mismo a trav\'es de una instancia de DatosSistemaParitarias. Despu\'es, la din\'amica de las paritarias se maneja (re)abriendo paritarias mediante el generador AbrirParitaria, o registrando el acontecimiento de una reuni\'on mediante el generador HuboReunion. Las operaciones empresasNegociando y gremiosNegociando permiten conocer las empresas y gremios con paritarias abiertas, y la operaci\'on gremioInconformista permite conocer alguno de los gremios que m\'as veces reabri\'o paritarias.
-% }
-
 \begin{tad}{\tadNombre{SistemaParitarias}}
 
-% \tadIgualdadObservacional{si}{si'}{sistema}{
-%   gremios(si) $\igobs$ gremios(si') \mand \\
-%   ((\paratodoC{ng}{nombre}{ ((\existeC{g}{gremio}{ g \en gremios(si)}) nombre(g) = ng})) aliados(ng, si) $\igobs$ aliados(ng, si') \mand historial(ng, si) $\igobs$ historial(ng, si'))
-% }
+\tadIgualdadObservacional{si}{si'}{sistema}{
+  gremios(si) \migobs gremios(si')\mandl \\
+  (\paratodoC{g}{gremio}{g \en gremios(si)}) aliados(g,si)\migobs aliados(g,si')\mand
+  paritaria(g,si)\migobs paritaria(g,si')
+}
 
 \tadGeneros{sistema}
 
-% \tadExporta{sistema, observadores, generadores, gremiosNegociando, empresasNegociando, \#trabajadoresNegociando, gremioInconformista}
+\tadExporta{sistema, observadores, generadores, gremiosNegociando, empresasNegociando, \#trabajadoresNegociando, gremioInconformista}
 
-% \tadUsa{\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Datos}, \tadNombre{Historial}, \tadNombre{Conjunto($\alpha$)}}
+\tadUsa{\tadNombre{Bool}, \tadNombre{Nat}, \tadNombre{Reunion}, \tadNombre{Paritaria}, \tadNombre{ConfederacionGremios}, \tadNombre{Conjunto($\alpha$)}}
 
 \tadObservadores
 	\tadAlinearFunciones{paritaria}{gremio/g, sistema/si}
@@ -25,7 +22,7 @@
 	\tadAlinearFunciones{HuboReunion}{reunion/rn, sistema/si}
   \tadOperacion{CrearSistema}{confederacion/c}{sistema}{}
   \tadOperacion{AbrirParitaria}{gremio/g, sistema/si}{sistema}{ g \en gremios(si) \mandl \mnot estaAbierta?(paritaria(g,si)) }
-  \tadOperacion{HuboReunion}{reunion/rn, sistema/si}{sistema}{ gremio(rn) \en gremios(si)\mandl (\paratodoC{ga}{gremio}{ga \en aliados(gremio(rn),si)})\\ gremioPidio(rn) > maximoAumento(paritaria(ga,si))}
+  \tadOperacion{HuboReunion}{reunion/rn, sistema/si}{sistema}{\vspace{1mm} gremio(rn) \en gremios(si)\mandl estaAbierta?(paritaria(gremio(rn),si))\mand\\ (\paratodoC{ga}{gremio}{ga \en aliados(gremio(rn),si)}) gremioPidio(rn) \mgt maximoAumento(paritaria(ga,si))}
 
 \tadOtrasOperaciones
   \tadAlinearFunciones{\#trabajadoresNegociando}{sistema/si}
@@ -100,7 +97,7 @@
                             {Ag(empresas(dameUno(cg)), obtenerEmpresas(sinUno(cg)))}}
   \tadAxioma{contarTrabajadores(cg)}{\iffi{\esvacio{cg}}
                                 {0}
-                                {\#(trabajadores(dameUno(cg))) + contarTrabajadores(sinUno(cg))}}
+                                {\#trabajadores(dameUno(cg)) + contarTrabajadores(sinUno(cg))}}
 
   \vspace{2mm}
   \tadAlinearAxiomas{obtenerGremiosInconformistas(cg,si)}
