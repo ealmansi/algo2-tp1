@@ -48,9 +48,9 @@
  	\tadAxioma{aliados(ng, CrearConfederacion)}{\vacio}
   	\tadAxioma{aliados(ng, AgregarGremio(g,c))}{aliados(ng,c)}
   	\tadAxioma{aliados(ng, EstablecerAlianza(ng1,ng2,c))}{
-	  	\iffi{ng \meq ng1}
-	  	{Ag(ng2, aliados(ng2,c))\union aliados(ng,c)}
-	  	{\iffiI{ng \meq ng2}{Ag(ng1, aliados(ng1,c))\union aliados(ng,c)}{aliados(ng,c)}}
+	  	\iffi{ng \meq ng1 \mor ng \en aliados(ng1,c)}
+	  	{Ag(ng2, aliados(ng,c))}
+	  	{\iffiI{ng \meq ng2 \mor ng \en aliados(ng2,c)}{Ag(ng1, aliados(ng,c))}{aliados(ng,c)}}
   	}
 
 \end{tad}						
